@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+/* Boatica Font Family */
+@font-face {
+  font-family: 'Boatica';
+  src: url('/fonts/Boatica/Boatica-Thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Boatica';
+  src: url('/fonts/Boatica/Boatica-ExtraLight.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Boatica';
+  src: url('/fonts/Boatica/Boatica-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Boatica';
+  src: url('/fonts/Boatica/Boatica-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Boatica';
+  src: url('/fonts/Boatica/Boatica-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Boatica';
+  src: url('/fonts/Boatica/Boatica-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Boatica';
+  src: url('/fonts/Boatica/Boatica-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Boatica';
+  src: url('/fonts/Boatica/Boatica-Extrabold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Magilio';
+  src: url('/fonts/MagilioRegular-Yzv2O.ttf') format('truetype');
+}
+
+@theme{
+  --font-Boatica: 'Boatica', sans-serif;
+  --font-Magilio: 'Magilio', cursive;
+}
