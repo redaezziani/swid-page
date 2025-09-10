@@ -1,10 +1,330 @@
+---
+const data = [
+  {
+    titel: "Blossom Dreams",
+    image: "/images/stories/s-1.jpg",
+    description:
+      "A gentle morning filled with blooming flowers and whispers of peace.",
+  },
+  {
+    titel: "Petals in the Wind",
+    image: "/images/stories/s-2.jpg",
+    description:
+      "Soft petals float gracefully, carrying serenity wherever they go.",
+  },
+  {
+    titel: "Peaceful Reverie",
+    image: "/images/stories/s-3.jpg",
+    description:
+      "A quiet moment of reflection, embracing calm and inner harmony.",
+  },
+  {
+    titel: "Golden Meadow",
+    image: "/images/stories/s-4.jpg",
+    description:
+      "Sunlight dances across fields of flowers, a gentle escape into nature’s beauty.",
+  },
+];
+---
+
 <main
   class="relative h-screen overflow-hidden w-full flex items-center justify-center"
 >
-  <img
-    src="/images/cover.jpg"
-    alt="Scenery"
-    class="h-full w-full absolute inset-0 object-cover"
-  />
-  <span class="absolute backdrop-blur-md inset-0 bg-black/40"></span>
+  <span
+    class="bg-gradient-to-t from-black/80 via-transparent to-transparent absolute inset-0 z-20"
+  ></span>
+  <div class="absolute inset-0 overflow-hidden">
+    <div
+      id="background-track"
+      class="flex h-full"
+      style={`width: ${data.length * 100}vw; transform: translateX(0);`}
+    >
+      {
+        data.map((story, index) => (
+          <img
+            src={story.image}
+            alt={story.titel}
+            class="h-full w-screen object-cover flex-shrink-0"
+          />
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Main Card Container - Fade Animation -->
+  <div class="flex w-full h-screen justify-center z-10 items-center">
+    <div id="card-container" class="relative h-96 w-72 overflow-hidden">
+      {
+        data.map((story, index) => (
+          <div
+            id={`card-${index}`}
+            class={`absolute inset-0 flex overflow-hidden transition-opacity duration-300 ${index === 0 ? "opacity-100" : "opacity-0"}`}
+          >
+            <img
+              class="absolute h-full w-full object-cover"
+              src={story.image}
+              alt={story.titel}
+            />
+            <span class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            <div class="absolute bottom-8 left-2 text-white z-10">
+              <h2 class="text-xl font-bold">{story.titel}</h2>
+              <p class="text-sm max-w-xs line-clamp-2">{story.description}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Backdrop Blur Overlay -->
+  <span class="absolute backdrop-blur-md inset-0 bg-black/40 z-5"></span>
+
+  <!-- Dynamic Progress Tabs -->
+  <div
+    class="absolute bottom-20 gap-2 z-20 flex"
+    style={`width: ${Math.max(data.length * 3, 12)}rem;`}
+  >
+    {
+      data.map((_, index) => (
+        <span
+          id={`tab-${index}`}
+          class="flex-1 h-0.5 bg-white/30 overflow-hidden relative cursor-pointer rounded-full transition-all duration-200 hover:h-1"
+        >
+          <span
+            id={`progress-${index}`}
+            class="absolute left-0 top-0 h-full bg-white w-0 rounded-full transition-all duration-100"
+          />
+        </span>
+      ))
+    }
+  </div>
 </main>
+
+<script>
+  import gsap from "gsap";
+
+  const DURATION = 5;
+  const data = [
+    {
+      titel: "Blossom Dreams",
+      image: "/images/stories/s-1.jpg",
+      description:
+        "A gentle morning filled with blooming flowers and whispers of peace.",
+    },
+    {
+      titel: "Petals in the Wind",
+      image: "/images/stories/s-2.jpg",
+      description:
+        "Soft petals float gracefully, carrying serenity wherever they go.",
+    },
+    {
+      titel: "Peaceful Reverie",
+      image: "/images/stories/s-3.jpg",
+      description:
+        "A quiet moment of reflection, embracing calm and inner harmony.",
+    },
+    {
+      titel: "Golden Meadow",
+      image: "/images/stories/s-4.jpg",
+      description:
+        "Sunlight dances across fields of flowers, a gentle escape into nature’s beauty.",
+    },
+  ];
+
+  let currentIndex = 0;
+  let progressTimeline: gsap.core.Timeline;
+  let isTransitioning = false;
+
+  function slideToStory(newIndex: number) {
+    if (
+      isTransitioning ||
+      newIndex === currentIndex ||
+      newIndex < 0 ||
+      newIndex >= data.length
+    )
+      return;
+
+    isTransitioning = true;
+    const oldIndex = currentIndex;
+
+    // Kill existing progress animation
+    if (progressTimeline) progressTimeline.kill();
+
+    // Create master timeline
+    const masterTimeline = gsap.timeline({
+      onComplete: () => {
+        isTransitioning = false;
+        startProgressAnimation(newIndex);
+      },
+    });
+
+    // Background push animation - slide left with no gaps
+    const backgroundTrack = document.getElementById("background-track");
+    if (backgroundTrack) {
+      masterTimeline.to(
+        backgroundTrack,
+        {
+          x: `-${newIndex * 100}vw`,
+          duration: 0.8,
+          ease: "power2.inOut",
+        },
+        0
+      );
+    }
+
+    // Card fade animation - smooth opacity transition
+    const oldCard = document.getElementById(`card-${oldIndex}`);
+    const newCard = document.getElementById(`card-${newIndex}`);
+
+    if (oldCard && newCard) {
+      masterTimeline.to(
+        oldCard,
+        {
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.inOut",
+        },
+        0
+      );
+
+      masterTimeline.to(
+        newCard,
+        {
+          opacity: 1,
+          duration: 0.4,
+          ease: "power2.inOut",
+        },
+        0.4
+      );
+    }
+
+    // Update progress bars
+    updateProgressBars(newIndex);
+
+    currentIndex = newIndex;
+  }
+
+  function updateProgressBars(activeIndex: number) {
+    data.forEach((_, index) => {
+      const progressBar = document.getElementById(`progress-${index}`);
+      if (!progressBar) return;
+
+      if (index < activeIndex) {
+        // Completed stories
+        gsap.set(progressBar, { width: "100%" });
+      } else if (index > activeIndex) {
+        // Future stories
+        gsap.set(progressBar, { width: "0%" });
+      }
+    });
+  }
+
+  function startProgressAnimation(index: number) {
+    const progressBar = document.getElementById(`progress-${index}`);
+    if (!progressBar) return;
+
+    progressTimeline = gsap.timeline();
+
+    progressTimeline.fromTo(
+      progressBar,
+      {
+        width: "0%",
+      },
+      {
+        width: "100%",
+        duration: DURATION,
+        ease: "none",
+        onComplete: () => {
+          // Auto advance to next story
+          if (index < data.length - 1) {
+            slideToStory(index + 1);
+          } else {
+            // Loop back to first story
+            slideToStory(0);
+          }
+        },
+      }
+    );
+  }
+
+  // Add click listeners to tabs
+  function initializeTabListeners() {
+    data.forEach((_, index) => {
+      const tab = document.getElementById(`tab-${index}`);
+      if (!tab) return;
+
+      // Hover effects
+      tab.addEventListener("mouseenter", () => {
+        if (!isTransitioning) {
+          gsap.to(tab, {
+            scale: 1.05,
+            duration: 0.2,
+            ease: "power2.out",
+          });
+        }
+      });
+
+      tab.addEventListener("mouseleave", () => {
+        gsap.to(tab, {
+          scale: 1,
+          duration: 0.2,
+          ease: "power2.out",
+        });
+      });
+
+      // Click handler
+      tab.addEventListener("click", () => {
+        if (isTransitioning || index === currentIndex) return;
+
+        // Click animation
+        gsap.to(tab, {
+          scale: 0.95,
+          duration: 0.1,
+          ease: "power2.out",
+          yoyo: true,
+          repeat: 1,
+          onComplete: () => {
+            slideToStory(index);
+          },
+        });
+      });
+    });
+  }
+
+  // Keyboard navigation
+  function handleKeyboard(event: KeyboardEvent) {
+    if (isTransitioning) return;
+
+    switch (event.key) {
+      case "ArrowLeft":
+        event.preventDefault();
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : data.length - 1;
+        slideToStory(prevIndex);
+        break;
+      case "ArrowRight":
+        event.preventDefault();
+        const nextIndex = currentIndex < data.length - 1 ? currentIndex + 1 : 0;
+        slideToStory(nextIndex);
+        break;
+    }
+  }
+
+  // Initialize everything when DOM is loaded
+  document.addEventListener("DOMContentLoaded", () => {
+    initializeTabListeners();
+    document.addEventListener("keydown", handleKeyboard);
+
+    // Start with first story
+    updateProgressBars(0);
+    startProgressAnimation(0);
+  });
+
+  // Pause/resume on visibility change
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      if (progressTimeline) progressTimeline.pause();
+    } else {
+      if (progressTimeline) progressTimeline.resume();
+    }
+  });
+</script>
