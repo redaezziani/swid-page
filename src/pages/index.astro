@@ -2,9 +2,11 @@
 import NavBar from "../components/react/nav-bar";
 import Base from "../layouts/base.astro";
 import Main from "../components/astro/main.astro";
+import FlowingBlobs from "../components/react/section";
 ---
 
 <Base>
   <NavBar client:load />
   <Main client:load />
+  <FlowingBlobs client:load />
 </Base>
