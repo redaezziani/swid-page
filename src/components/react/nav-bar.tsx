@@ -129,9 +129,7 @@ export default function NavBar() {
     <header className="w-full z-50 flex items-center justify-center py-4 fixed top-0">
       <section className="flex justify-between w-full max-w-6xl items-center px-4">
         <a href="/">
-          <h1 className="text-6xl text-shadow-2xs font-Magilio text-white">
-            Rio
-          </h1>
+          <h1 className="text-6xl text-shadow-2xs  text-white">Rio</h1>
         </a>
 
         <div className="flex gap-x-6 justify-center items-center">
@@ -155,7 +153,7 @@ export default function NavBar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-4xl font-Magilio text-white font-bold"
+                  className="text-4xl  text-white font-bold"
                 >
                   {link.name}
                 </a>

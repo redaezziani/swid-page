@@ -91,6 +91,7 @@ const LiquidBlobs = () => {
       }
 
       draw() {
+        if (!ctx) return;
         const gradient = ctx.createRadialGradient(
           this.x,
           this.y,
@@ -152,9 +153,21 @@ const LiquidBlobs = () => {
   }, []);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-white">
+    <section
+      id="liquid-section"
+      className="relative h-screen w-full overflow-hidden bg-white"
+    >
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-      <div className="relative z-10 flex items-center justify-center h-full text-center text-black px-4"></div>
+
+      <div className="relative z-10 grid grid-cols-1 h-full grid-rows-4 w-full">
+        <span className="w-full col-span-1 px-4 py-2 row-span-1 flex flex-col  items-start  border-t border-neutral-300/45 h-full">
+          <h3 className=" text-neutral-500 text-lg">Core business areas</h3>
+          <p className=" text-7xl mt-10 font-light ">What we do</p>
+        </span>
+        <span className="w-full col-span-1 px-4 py-2 row-span-1  border-t border-neutral-300/45 h-full"></span>
+        <span className="w-full col-span-1 px-4 py-2 row-span-1  border-t border-neutral-300/45 h-full"></span>
+        <span className="w-full col-span-1 px-4 py-2 row-span-1  border-t border-neutral-300/45 h-full"></span>
+      </div>
     </section>
   );
 };
