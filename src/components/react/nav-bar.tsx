@@ -81,7 +81,6 @@ function MaskedLink({ name, href }: { name: string; href: string }) {
           ref={textRef}
           x="0"
           y={FONT_SIZE * 0.78}
-          fontFamily='Inter, system-ui, -apple-system, "Segoe UI", Roboto'
           fontSize={FONT_SIZE}
           fill="white"
           mask={`url(#${maskIdRef.current})`}
@@ -153,7 +152,7 @@ export default function NavBar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-4xl  text-white font-bold"
+                  className="text-4xl  text-white"
                 >
                   {link.name}
                 </a>
